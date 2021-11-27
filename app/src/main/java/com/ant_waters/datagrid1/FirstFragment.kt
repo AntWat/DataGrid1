@@ -145,8 +145,9 @@ class FirstFragment : Fragment() {
                 (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0]),
                 colWidth, fixedRowHeight, cellBackground)
             setHeaderBg(allCells[r+1][0] as View)
+            allCells[r+1][0]!!.setPadding(0, 5, 0, 5)
             val fixedView: TextView? = allCells[r+1][0]
-                //fixedView?.setBackgroundColor(Color.LTGRAY)
+            //fixedView?.setBackgroundColor(Color.LTGRAY)
             fixedColumn.addView(fixedView)
 
             row = TableRow(_context)
@@ -256,9 +257,10 @@ class FirstFragment : Fragment() {
         txtView!!.setHeight(h)
 
 //        var lp  = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-//        var lp  = LayoutParams()
-//        lp.setMargins(5,5,5,5);
-//        txtView.layoutParams = lp
+        var lp  = LayoutParams()
+        val mgn = dpToPx(2)
+        lp.setMargins(mgn,mgn,mgn,mgn);
+        txtView.layoutParams = lp
 
         //txtView!!.setHeight(fixedHeightInPixels)
         txtView!!.setGravity(Gravity.CENTER_HORIZONTAL + Gravity.CENTER_VERTICAL)
