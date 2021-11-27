@@ -125,17 +125,18 @@ class FirstFragment : Fragment() {
         val header = _binding?.tableHeader as TableLayout
         row.setLayoutParams(wrapWrapTableRowParams)
         row.setGravity(Gravity.CENTER)
-        row.setBackgroundColor(Color.LTGRAY)
+        //row.setBackgroundColor(Color.LTGRAY)
 
         for (c in 0..dataTable.NumColumns-1) {
             allCells[0][c] = createCell(dataTable.Headers[c], colWidth, fixedHeaderHeight, cellBackground)
+            setHeaderBg(allCells[0][c] as View)
             row.addView(allCells[0][c])
         }
         header.addView(row)
 
         // Row header (fixed horizontally)
         val fixedColumn = _binding?.fixedColumn as TableLayout
-        fixedColumn?.setBackgroundColor(Color.LTGRAY)
+        //fixedColumn?.setBackgroundColor(Color.LTGRAY)
 
         // Rest of the table (within a scroll view)
         val scrollablePart = _binding?.scrollablePart as TableLayout
@@ -143,6 +144,7 @@ class FirstFragment : Fragment() {
             allCells[r+1][0] = createCell(
                 (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0]),
                 colWidth, fixedRowHeight, cellBackground)
+            setHeaderBg(allCells[r+1][0] as View)
             val fixedView: TextView? = allCells[r+1][0]
                 //fixedView?.setBackgroundColor(Color.LTGRAY)
             fixedColumn.addView(fixedView)
@@ -151,12 +153,13 @@ class FirstFragment : Fragment() {
             for (c in 1..dataTable.NumColumns-1) {
                 val dataVal = (if (r == -1) dataTable.Headers[c] else dataTable.Rows[r][c])
                 allCells[r+1][c] = createCell(dataVal, colWidth, fixedHeaderHeight, cellBackground)
+                setContentBg(allCells[r+1][c] as View)
                 row.addView(allCells[r+1][c])
             }
 
             row.setLayoutParams(wrapWrapTableRowParams)
             row.setGravity(Gravity.CENTER)      //Gravity.CENTER
-            row.setBackgroundColor(Color.WHITE)
+            //row.setBackgroundColor(Color.WHITE)
             scrollablePart.addView(row)
         }
 
@@ -248,19 +251,21 @@ class FirstFragment : Fragment() {
         //txtView!!.setWidth(widthInPercentOfScreenWidth)
 
         val w = dpToPx(56)
+        val h = dpToPx(100)
         txtView!!.setWidth(w)
-        txtView!!.setHeight(dpToPx(100))
+        txtView!!.setHeight(h)
 
-        var lp  = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        lp.setMargins(50,5,5,5);
-        txtView.layoutParams = lp
+//        var lp  = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+//        var lp  = LayoutParams()
+//        lp.setMargins(5,5,5,5);
+//        txtView.layoutParams = lp
 
         //txtView!!.setHeight(fixedHeightInPixels)
         txtView!!.setGravity(Gravity.CENTER_HORIZONTAL + Gravity.CENTER_VERTICAL)
 
-        txtView!!.setPadding(15, 5, 15, 5)
+//        txtView!!.setPadding(15, 5, 15, 5)
 
-        txtView!!.background = cellBackground
+        //txtView!!.background = cellBackground
 
         return txtView
     }
@@ -272,6 +277,15 @@ class FirstFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    private fun setHeaderBg(view: View) {
+        view.setBackgroundResource(com.ant_waters.datagrid1.R.drawable.table_header_cell_bg)
+    }
+
+    private fun setContentBg(view: View) {
+        view.setBackgroundResource(com.ant_waters.datagrid1.R.drawable.table_content_cell_bg)
     }
 }
 

@@ -5,37 +5,58 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
-    android:id="@+id/main_area">
+    android:id="@+id/main_area"
+    android:layout_marginTop="0in"
+    android:layout_marginBottom="0in"
+    android:layout_marginLeft="0in"
+    android:layout_marginRight="0in"    >
+
     <HorizontalScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        >
+<!--        android:layout_paddingBottom="0dp"-->
         <TableLayout
             android:id="@+id/table_header"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/cell_border"/>
+            android:background="@drawable/cell_border"
+            android:layout_marginBottom="0dp"
+            >
+        </TableLayout>
     </HorizontalScrollView>
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent"
+        android:layout_marginTop="0dp"
+        >
         <LinearLayout android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="center_horizontal"
-            android:id="@+id/fillable_area">
+            android:id="@+id/fillable_area"
+            android:layout_marginTop="0dp"
+            >
             <TableLayout
                 android:id="@+id/fixed_column"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cell_border"/>
+                android:layout_height="fill_parent"
+                android:background="@drawable/cell_border"
+                android:layout_marginTop="0dp"
+                />
             <HorizontalScrollView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="fill_parent"
+                android:layout_marginTop="0dp"
+                >
                 <TableLayout
                     android:id="@+id/scrollable_part"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@drawable/cell_border"/>
+                    android:background="@drawable/cell_border"
+                    android:layout_marginTop="0dp"
+                    />
             </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>

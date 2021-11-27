@@ -5,6 +5,9 @@
       <map>
         <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/drawable/cell_border.xml" value="0.1796875" />
         <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1796875" />
+        <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/drawable/table_content_cell_bg.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/drawable/table_header_cell_bg.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/layout/activity_main.xml" value="0.16354166666666667" />
         <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/layout/fragment_first.xml" value="0.1983695652173913" />
         <entry key="..\:/Users/Antw/AndroidStudioProjects/DataGrid1/app/src/main/res/layout/fragment_second.xml" value="0.29846014492753625" />
       </map>
