@@ -145,10 +145,12 @@ class FirstFragment : Fragment() {
                 (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0]),
                 colWidth, fixedRowHeight, cellBackground)
             setHeaderBg(allCells[r+1][0] as View)
-            allCells[r+1][0]!!.setPadding(0, 5, 0, 5)
+            //allCells[r+1][0]!!.setPadding(0, 5, 0, 5)
             val fixedView: TextView? = allCells[r+1][0]
             //fixedView?.setBackgroundColor(Color.LTGRAY)
-            fixedColumn.addView(fixedView)
+            row = TableRow(_context)
+            row.addView(fixedView)
+            fixedColumn.addView(row)
 
             row = TableRow(_context)
             for (c in 1..dataTable.NumColumns-1) {
@@ -198,9 +200,7 @@ class FirstFragment : Fragment() {
 
     fun setColumnWidths(allCells: Array<Array<TextView?>>)
     {
-        return
-
-        var cellBackground = getCellBackground()
+        //var cellBackground = getCellBackground()
         val numColumns: Int = allCells[0].size
         val colWidths = Array<Int>(numColumns, {0})
         for (r in 0..allCells.size-1)
@@ -252,12 +252,12 @@ class FirstFragment : Fragment() {
         //txtView!!.setWidth(widthInPercentOfScreenWidth)
 
         val w = dpToPx(56)
-        val h = dpToPx(100)
-        txtView!!.setWidth(w)
-        txtView!!.setHeight(h)
+        val h = dpToPx(50)
+//        txtView!!.setWidth(w)
+//        txtView!!.setHeight(h)
 
-//        var lp  = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        var lp  = LayoutParams()
+        var lp  = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        //var lp  = LayoutParams()
         val mgn = dpToPx(2)
         lp.setMargins(mgn,mgn,mgn,mgn);
         txtView.layoutParams = lp
@@ -265,7 +265,7 @@ class FirstFragment : Fragment() {
         //txtView!!.setHeight(fixedHeightInPixels)
         txtView!!.setGravity(Gravity.CENTER_HORIZONTAL + Gravity.CENTER_VERTICAL)
 
-//        txtView!!.setPadding(15, 5, 15, 5)
+        txtView!!.setPadding(15, 5, 15, 5)
 
         //txtView!!.background = cellBackground
 
