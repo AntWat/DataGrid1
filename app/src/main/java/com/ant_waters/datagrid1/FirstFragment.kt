@@ -1,6 +1,5 @@
 package com.ant_waters.datagrid1
 
-import android.R
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,11 +17,8 @@ import android.widget.TableRow
 
 import android.widget.TableRow.LayoutParams;
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import org.w3c.dom.Text
+import android.widget.LinearLayout
 
 
 /**
@@ -54,7 +50,7 @@ class FirstFragment : Fragment() {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
-        val allCells = displayTestTable()
+        val allCells = displayTestTable(inflater)
 
         val content: View = _binding!!.mainArea
         content.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
@@ -63,7 +59,11 @@ class FirstFragment : Fragment() {
                 content.viewTreeObserver.removeGlobalOnLayoutListener(this)
 
                 //Resize the columns to match the maximum width
-                setColumnWidths(allCells)
+                setColumnWidths(allCells, fun (v: View, w: Int) {
+                    val tv = v.findViewById<View>(com.ant_waters.datagrid1.R.id.cell_text_view) as TextView
+                    tv.setWidth(w)
+                    tv.setGravity(Gravity.CENTER)
+                })
             }
         })
 
@@ -101,16 +101,16 @@ class FirstFragment : Fragment() {
         return table
     }
 
-    fun displayTestTable(): Array<Array<TextView?>>
+    fun displayTestTable(inflater: LayoutInflater): Array<Array<View?>>
     {
         val testData = getTestData(20, 100)
-        return displayTable(testData)
+        return displayTable(inflater, testData)
     }
 
-    fun displayTable(dataTable: SimpleTable): Array<Array<TextView?>>
+    fun displayTable(inflater: LayoutInflater, dataTable: SimpleTable): Array<Array<View?>>
     {
         var cellBackground = getCellBackground()
-        var allCells = Array(dataTable.NumRows+1) {Array<TextView?>(dataTable.NumColumns) {null} }
+        var allCells = Array(dataTable.NumRows+1) {Array<View?>(dataTable.NumColumns) {null} }
 
         val wrapWrapTableRowParams: TableRow.LayoutParams =
             LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -128,7 +128,9 @@ class FirstFragment : Fragment() {
         //row.setBackgroundColor(Color.LTGRAY)
 
         for (c in 0..dataTable.NumColumns-1) {
-            allCells[0][c] = createCell(dataTable.Headers[c], colWidth, fixedHeaderHeight, cellBackground)
+//            allCells[0][c] = createCell(dataTable.Headers[c], colWidth, fixedHeaderHeight, cellBackground)
+            val colHdrText = dataTable.Headers[c]
+            allCells[0][c] = createHeaderCellFromTemplate(inflater, colHdrText)
             setHeaderBg(allCells[0][c] as View)
             row.addView(allCells[0][c])
         }
@@ -141,21 +143,25 @@ class FirstFragment : Fragment() {
         // Rest of the table (within a scroll view)
         val scrollablePart = _binding?.scrollablePart as TableLayout
         for (r in 0..dataTable.NumRows-1) {
-            allCells[r+1][0] = createCell(
-                (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0]),
-                colWidth, fixedRowHeight, cellBackground)
+
+            // ----------- Create RowHeader
+//            allCells[r+1][0] = createCell(
+//                (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0]),
+//                colWidth, fixedRowHeight, cellBackground)
+            val rowHdrText = (if (r == -1) dataTable.Headers[0] else dataTable.Rows[r][0])
+            allCells[r+1][0] = createHeaderCellFromTemplate(inflater, rowHdrText)
             setHeaderBg(allCells[r+1][0] as View)
-            //allCells[r+1][0]!!.setPadding(0, 5, 0, 5)
-            val fixedView: TextView? = allCells[r+1][0]
             //fixedView?.setBackgroundColor(Color.LTGRAY)
             row = TableRow(_context)
-            row.addView(fixedView)
+            row.addView(allCells[r+1][0])
             fixedColumn.addView(row)
 
+            // ----------- Create Row Data
             row = TableRow(_context)
             for (c in 1..dataTable.NumColumns-1) {
                 val dataVal = (if (r == -1) dataTable.Headers[c] else dataTable.Rows[r][c])
-                allCells[r+1][c] = createCell(dataVal, colWidth, fixedHeaderHeight, cellBackground)
+//                allCells[r+1][c] = createCell(dataVal, colWidth, fixedHeaderHeight, cellBackground)
+                allCells[r+1][c] = createDataCellFromTemplate(inflater, dataVal)
                 setContentBg(allCells[r+1][c] as View)
                 row.addView(allCells[r+1][c])
             }
@@ -166,39 +172,10 @@ class FirstFragment : Fragment() {
             scrollablePart.addView(row)
         }
 
-        // ------------ Set the borders and widths for all cells
-
-//        scrollablePart?.invalidate();
-//        scrollablePart?.requestLayout()
-
-        /*
-        val colWidths = Array<Int>(dataTable.NumColumns, {0})
-
-        for (r in 0..allCells.size-1)
-        {
-            for (c in 0..dataTable.NumColumns-1)
-            {
-                val tv = allCells[r][c]!!
-                tv?.invalidate()
-                tv?.requestLayout()
-                //tv!!.background = cellBackground
-                if (tv.width > colWidths[c]) { colWidths[c] = tv.width}
-            }
-        }
-        for (r in 0..allCells.size-1)
-        {
-            for (c in 0..dataTable.NumColumns-1)
-            {
-                val tv = allCells[r][c]
-                //tv?.setWidth(colWidths[c])
-            }
-        }
-*/
-
         return  allCells
     }
 
-    fun setColumnWidths(allCells: Array<Array<TextView?>>)
+    fun setColumnWidths(allCells: Array<Array<View?>>, setItemWidth: (v: View, w: Int) -> Unit)
     {
         //var cellBackground = getCellBackground()
         val numColumns: Int = allCells[0].size
@@ -207,20 +184,19 @@ class FirstFragment : Fragment() {
         {
             for (c in 0..numColumns-1)
             {
-                val tv : TextView = allCells[r][c]!!
-                if (tv.width > colWidths[c]) { colWidths[c] = tv.width}
+                val vw : View = allCells[r][c]!!
+                if (vw.width > colWidths[c]) { colWidths[c] = vw.width}
             }
         }
         for (r in 0..allCells.size-1)
         {
             for (c in 0..numColumns-1)
             {
-                val tv = allCells[r][c]!!
-                if  ((r == 0) || (r==1))
-                {
-                    tv.setWidth(colWidths[c])
-                }
-                //tv!!.background = cellBackground
+                val vw = allCells[r][c]!! as LinearLayout
+//                if  ((r == 0) || (r==1))
+//                {
+                    setItemWidth(vw, colWidths[c])
+//                }
             }
         }
     }
@@ -236,12 +212,30 @@ class FirstFragment : Fragment() {
         return cellBackground!!
     }
 
+
+    fun createHeaderCellFromTemplate(inflater: LayoutInflater, text: String?): View {
+        val cellView: View = inflater.inflate(com.ant_waters.datagrid1.R.layout.header_cell, null)
+        val tv = cellView.findViewById<View>(com.ant_waters.datagrid1.R.id.cell_text_view) as TextView
+        tv.text = text
+
+        return cellView
+    }
+
+    fun createDataCellFromTemplate(inflater: LayoutInflater, text: String?): View {
+        val cellView: View = inflater.inflate(com.ant_waters.datagrid1.R.layout.data_cell, null)
+        val tv = cellView.findViewById<View>(com.ant_waters.datagrid1.R.id.cell_text_view) as TextView
+        tv.text = text
+
+        return cellView
+    }
+
     fun createCell(
         text: String?,
         widthInPercentOfScreenWidth: Int,
         fixedHeightInPixels: Int,
         cellBackground: Drawable?
     ): TextView {
+
         //val screenWidth = resources.displayMetrics.widthPixels
         var txtView = TextView(_context)
         txtView!!.setText(text)
