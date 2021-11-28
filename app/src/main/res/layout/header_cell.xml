@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/header_cell_linear_layout"
+    android:id="@+id/cell_linear_layout"
     android:layout_marginTop="0in"
     android:layout_marginBottom="0in"
     android:layout_marginLeft="0in"
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/cell_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"

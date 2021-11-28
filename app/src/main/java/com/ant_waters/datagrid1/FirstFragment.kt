@@ -61,7 +61,10 @@ class FirstFragment : Fragment() {
                 //Resize the columns to match the maximum width
                 setColumnWidths(allCells, fun (v: View, w: Int) {
                     val tv = v.findViewById<View>(com.ant_waters.datagrid1.R.id.cell_text_view) as TextView
-                    tv.setWidth(w)
+//                    tv.setWidth(w)
+                    var lp  = LayoutParams(w, LayoutParams.WRAP_CONTENT)
+                    v.layoutParams = lp
+
                     tv.setGravity(Gravity.CENTER)
                 })
             }
@@ -74,9 +77,10 @@ class FirstFragment : Fragment() {
     fun getTestData(numCols:Int, numRows:Int) : SimpleTable
     {
         val table = SimpleTable()
-        val longHdrCol = 0
+        val longHdrCol = 2
         val longDataCol = 1
         val numLongRows = 4
+        val warning_row = 6
 
 
         val headers = mutableListOf<String>()
@@ -93,7 +97,8 @@ class FirstFragment : Fragment() {
             values.clear()
             for (c in 0..numCols-1)
             {
-                val datVal: String = (if ((r < numLongRows) && (c == longDataCol)) "Longer Val${r},${c+1}" else "Val${r},${c+1}")
+                var datVal: String = (if ((r < numLongRows) && (c == longDataCol)) "Longer Val${r},${c+1}" else "Val${r},${c+1}")
+                if  (r==warning_row) { datVal = "War${r},${c+1}" }
                 values.add(datVal);
             }
             table.addRow(values.toList())
@@ -222,7 +227,10 @@ class FirstFragment : Fragment() {
     }
 
     fun createDataCellFromTemplate(inflater: LayoutInflater, text: String?): View {
-        val cellView: View = inflater.inflate(com.ant_waters.datagrid1.R.layout.data_cell, null)
+        var templateId = com.ant_waters.datagrid1.R.layout.data_cell
+        if (text?.startsWith("War")!!) { templateId = com.ant_waters.datagrid1.R.layout.warning_data_cell }
+        val cellView: View = inflater.inflate(templateId, null)
+
         val tv = cellView.findViewById<View>(com.ant_waters.datagrid1.R.id.cell_text_view) as TextView
         tv.text = text
 
