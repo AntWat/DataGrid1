@@ -20,6 +20,11 @@ import android.graphics.drawable.Drawable
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
 
+// The starting point for this code cam from: https://stackoverflow.com/questions/7119231/android-layout-how-to-implement-a-fixed-freezed-header-and-column
+// and other sources:
+
+// Dee also: https://stackoverflow.com/questions/3948934/synchronise-scrollview-scroll-positions-android
+
 
 /**
  * A Fragment to display a test data table
