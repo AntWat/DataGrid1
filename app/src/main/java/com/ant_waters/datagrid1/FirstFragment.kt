@@ -132,15 +132,27 @@ class FirstFragment : Fragment(), HorizontalScrollViewListener {
     {
         var allCells = Array(dataTable.NumRows+1) {Array<View?>(dataTable.NumColumns) {null} }
 
-        // ------------- Main header (fixed vertically)
         val wrapWrapTableRowParams: TableRow.LayoutParams =
             LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+        // ------------- Top left cell (fixed completely)
         var row = TableRow(_context)
+        val topLeftTL = _binding?.topLeftCell as TableLayout
+        row.setLayoutParams(wrapWrapTableRowParams)
+        row.setGravity(Gravity.CENTER)
+        val topLeftText = dataTable.Headers[0]
+        allCells[0][0] = createHeaderCellFromTemplate(inflater, topLeftText)
+        setHeaderBg(allCells[0][0] as View)
+        row.addView(allCells[0][0])
+        topLeftTL.addView(row)
+
+        // ------------- Main header (fixed vertically)
+        row = TableRow(_context)
         val header = _binding?.tableHeader as TableLayout
         row.setLayoutParams(wrapWrapTableRowParams)
         row.setGravity(Gravity.CENTER)
 
-        for (c in 0..dataTable.NumColumns-1) {
+        for (c in 1..dataTable.NumColumns-1) {
             val colHdrText = dataTable.Headers[c]
             allCells[0][c] = createHeaderCellFromTemplate(inflater, colHdrText)
             setHeaderBg(allCells[0][c] as View)

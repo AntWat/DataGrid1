@@ -13,19 +13,43 @@
     android:layout_marginRight="0in"
     android:background="@android:color/holo_green_dark">
 
-    <com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
+    <LinearLayout android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/column_header_scroll"
+        android:gravity="center_horizontal"
+        android:id="@+id/header_area"
         >
-<!--        android:layout_paddingBottom="0dp"-->
+
+        <!-- Top left cell, in a table of its own-->
         <TableLayout
-            android:id="@+id/table_header"
+            android:id="@+id/top_left_cell"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingLeft="0in"
+            android:paddingRight="0in"
+            android:paddingTop="0in"
+            android:paddingBottom="0in"
+            />
+
+        <!-- Column header horizontal scroll-->
+        <com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/column_header_scroll"
             >
-        </TableLayout>
-    </com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView>
+
+            <!-- Column Headers-->
+            <TableLayout
+                android:id="@+id/table_header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+            </TableLayout>
+        </com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView>
+    </LinearLayout>
+
+    <!-- Data area vertical scroll-->
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -36,6 +60,8 @@
             android:gravity="center_horizontal"
             android:id="@+id/fillable_area"
             >
+
+            <!-- Data row headers-->
             <TableLayout
                 android:id="@+id/fixed_column"
                 android:layout_width="wrap_content"
@@ -46,11 +72,15 @@
                 android:paddingTop="0in"
                 android:paddingBottom="0in"
                 />
+
+            <!-- Data rows horizontal scroll-->
             <com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/data_horizontal_scroll"
                 >
+
+                <!-- Data rows-->
                 <TableLayout
                     android:id="@+id/scrollable_part"
                     android:layout_width="fill_parent"
