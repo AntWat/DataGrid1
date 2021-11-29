@@ -19,6 +19,8 @@ import android.widget.TableRow.LayoutParams;
 import android.graphics.drawable.Drawable
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
+import com.ant_waters.datagrid1.utils.HorizontalScrollViewListener
+import com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
 
 // The starting point for this code cam from: https://stackoverflow.com/questions/7119231/android-layout-how-to-implement-a-fixed-freezed-header-and-column
 // and other sources:
@@ -29,10 +31,14 @@ import android.widget.LinearLayout
 /**
  * A Fragment to display a test data table
  */
-class FirstFragment : Fragment() {
+class FirstFragment : Fragment(), HorizontalScrollViewListener {
 
     private var _binding: FragmentFirstBinding? = null
     private var _context: Context? = null
+
+    private var horizontalScrollView1: ObservableHorizontalScrollView? = null
+    private var horizontalScrollView2: ObservableHorizontalScrollView? = null
+    private var interceptScroll: Boolean = true
 
     fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
@@ -53,6 +59,12 @@ class FirstFragment : Fragment() {
         _context = getActivity()?.getApplicationContext()
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+
+        horizontalScrollView1 = _binding!!.columnHeaderScroll
+        horizontalScrollView2 = _binding!!.dataHorizontalScroll
+
+        horizontalScrollView1!!.setScrollViewListener(this);
+        horizontalScrollView2!!.setScrollViewListener(this);
 
         // Display the table
         val allCells = displayTestTable(inflater)
@@ -228,6 +240,24 @@ class FirstFragment : Fragment() {
 
     private fun setContentBg(view: View) {
         view.setBackgroundResource(com.ant_waters.datagrid1.R.drawable.table_content_cell_bg)
+    }
+
+    override fun onScrollChanged(
+        scrollView: ObservableHorizontalScrollView?,
+        x: Int, y: Int, oldx: Int, oldy: Int
+    ) {
+        if (interceptScroll)
+        {
+            interceptScroll = false
+            if(scrollView == horizontalScrollView1) {
+                horizontalScrollView2!!.scrollTo(x, y);
+//                horizontalScrollView2!!.onOverScrolled(x,y,true,true);
+            } else if(scrollView == horizontalScrollView2) {
+                horizontalScrollView1!!.scrollTo(x, y)
+//                horizontalScrollView1!!.onOverScrolled(x,y,true,true)
+            }
+            interceptScroll = true
+        }
     }
 }
 

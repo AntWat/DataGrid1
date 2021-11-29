@@ -13,9 +13,10 @@
     android:layout_marginRight="0in"
     android:background="@android:color/holo_green_dark">
 
-    <HorizontalScrollView
+    <com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/column_header_scroll"
         >
 <!--        android:layout_paddingBottom="0dp"-->
         <TableLayout
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             >
         </TableLayout>
-    </HorizontalScrollView>
+    </com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView>
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -45,9 +46,10 @@
                 android:paddingTop="0in"
                 android:paddingBottom="0in"
                 />
-            <HorizontalScrollView
+            <com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:id="@+id/data_horizontal_scroll"
                 >
                 <TableLayout
                     android:id="@+id/scrollable_part"
@@ -58,7 +60,7 @@
                     android:paddingTop="0in"
                     android:paddingBottom="0in"
                     />
-            </HorizontalScrollView>
+            </com.ant_waters.datagrid1.utils.ObservableHorizontalScrollView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
