@@ -8,6 +8,6 @@ The approach could be extended to display any number of graphic items in a cells
 The table also shows how to shows borders around the cells.
 
 
-![Test Image 1](3DTest.png)
+![Screenshot-1](screenshots/Screenshot-1.png)
 
 
